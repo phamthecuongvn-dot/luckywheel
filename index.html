@@ -4,23 +4,39 @@
     <meta charset="UTF-8">
     <title>VÒNG QUAY MS HƯƠNG</title>
     <style>
-        body { text-align: center; font-family: Arial, sans-serif; background: #f4f7f6; padding-top: 50px; }
-        .wheel-container { position: relative; width: 350px; height: 350px; margin: 0 auto; }
-        #wheel { width: 100%; height: 100%; border-radius: 50%; border: 8px solid #333; 
-                 transition: transform 5s cubic-bezier(0.1, 0, 0.2, 1);
-                 background: conic-gradient(#e74c3c 0deg 90deg, #f1c40f 90deg 180deg, #2ecc71 180deg 270deg, #3498db 270deg 360deg); }
-        .pointer { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); 
-                   width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid #333; z-index: 10; }
-        button { margin-top: 40px; padding: 15px 40px; font-size: 20px; cursor: pointer; background: #e74c3c; color: #fff; border: none; border-radius: 50px; font-weight: bold; box-shadow: 0 4px #c0392b; }
-        button:active { box-shadow: none; transform: translateY(4px); }
-        #result { margin-top: 20px; font-size: 22px; font-weight: bold; color: #2c3e50; }
+        body { text-align: center; font-family: 'Segoe UI', Arial, sans-serif; background: #f4f7f6; margin: 0; padding-top: 50px; }
+        .container { position: relative; width: 450px; height: 450px; margin: 0 auto; }
+        #wheel { width: 100%; height: 100%; border-radius: 50%; border: 10px solid #333; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: transform 5s cubic-bezier(0.1, 0, 0.2, 1); }
+        .pointer { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 40px solid #333; z-index: 100; }
+        .center-dot { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; background: white; border: 5px solid #333; border-radius: 50%; z-index: 50; }
+        button { margin-top: 40px; padding: 15px 50px; font-size: 22px; cursor: pointer; background: #e74c3c; color: white; border: none; border-radius: 50px; font-weight: bold; box-shadow: 0 5px #c0392b; text-transform: uppercase; }
+        button:active { box-shadow: none; transform: translateY(5px); }
+        #result { margin-top: 25px; font-size: 26px; font-weight: 800; color: #2c3e50; min-height: 35px; }
     </style>
 </head>
 <body>
     <h1>VÒNG QUAY MAY MẮN MS HƯƠNG</h1>
-    <div class="wheel-container">
+    <div class="container">
         <div class="pointer"></div>
-        <div id="wheel"></div>
+        <div class="center-dot"></div>
+        <svg id="wheel" viewBox="0 0 100 100">
+            <g>
+                <path d="M 50 50 L 50 0 A 50 50 0 0 1 100 50 Z" fill="#e74c3c"/>
+                <text x="75" y="30" fill="white" font-size="5" font-weight="bold" transform="rotate(45, 75, 30)">GIẢI NHẤT</text>
+            </g>
+            <g>
+                <path d="M 50 50 L 100 50 A 50 50 0 0 1 50 100 Z" fill="#f1c40f"/>
+                <text x="75" y="70" fill="white" font-size="5" font-weight="bold" transform="rotate(135, 75, 70)">GIẢI NHÌ</text>
+            </g>
+            <g>
+                <path d="M 50 50 L 50 100 A 50 50 0 0 1 0 50 Z" fill="#2ecc71"/>
+                <text x="25" y="70" fill="white" font-size="5" font-weight="bold" transform="rotate(225, 25, 70)">GIẢI BA</text>
+            </g>
+            <g>
+                <path d="M 50 50 L 0 50 A 50 50 0 0 1 50 0 Z" fill="#3498db"/>
+                <text x="25" y="30" fill="white" font-size="4" font-weight="bold" transform="rotate(-45, 25, 30)">MAY MẮN</text>
+            </g>
+        </svg>
     </div>
     <button onclick="spin()">BẤM ĐỂ QUAY</button>
     <div id="result"></div>
@@ -30,12 +46,21 @@
         const r = parseInt(params.get('r')) || 0;
         function spin() {
             const wheel = document.getElementById('wheel');
-            const resultText = document.getElementById('result');
-            // Tính toán góc quay để dừng đúng vị trí dựa trên r (0-100)
-            const stopDeg = 3600 + (360 - (r * 3.6)); 
-            wheel.style.transform = "rotate(" + stopDeg + "deg)";
+            const res = document.getElementById('result');
+            res.innerText = "ĐANG QUAY...";
+            
+            // Logic: r từ 0-100. Chia 4 vùng: 0-25 (May mắn), 26-50 (Giải Ba), 51-75 (Giải Nhì), 76-100 (Giải Nhất)
+            let angle = 0;
+            if (r > 75) angle = 315;      // Dừng ở Đỏ (Giải Nhất)
+            else if (r > 50) angle = 225; // Dừng ở Vàng (Giải Nhì)
+            else if (r > 25) angle = 135; // Dừng ở Xanh lá (Giải Ba)
+            else angle = 45;              // Dừng ở Xanh dương (May mắn)
+
+            const totalRotation = 3600 + angle; 
+            wheel.style.transform = `rotate(${totalRotation}deg)`;
+            
             setTimeout(() => {
-                resultText.innerText = "KẾT QUẢ ĐÃ ĐƯỢC GHI NHẬN!";
+                res.innerText = "QUAY XONG! HÃY XEM KẾT QUẢ TRÊN APP.";
             }, 5000);
         }
     </script>
