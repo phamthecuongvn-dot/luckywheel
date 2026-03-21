@@ -16,7 +16,8 @@
         .btn-spin, .btn-confirm { margin-top: 25px; padding: 18px 40px; font-size: 20px; font-weight: 900; cursor: pointer; border: none; border-radius: 100px; text-transform: uppercase; transition: all 0.2s; width: 85%; max-width: 320px; }
         .btn-spin { background: #e74c3c; color: white; box-shadow: 0 8px 0 #c0392b; display: inline-block; }
         .btn-spin:active { transform: translateY(6px); box-shadow: 0 2px 0 #c0392b; }
-        .btn-confirm { background: #27ae60; color: white; box-shadow: 0 8px 0 #1e8449; display: none; margin: 25px auto 0; z-index: 200; position: relative; }
+        .btn-confirm { background: #27ae60; color: white; box-shadow: 0 8px 0 #1e8449; display: none; margin: 25px auto 0; position: relative; z-index: 200; }
+        .btn-confirm:active { transform: translateY(6px); box-shadow: 0 2px 0 #1e8449; }
         #result-display { margin-top: 25px; font-size: 24px; font-weight: 800; color: #2c3e50; min-height: 40px; text-transform: uppercase; padding: 0 10px; }
     </style>
 </head>
@@ -54,92 +55,67 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const r = parseInt(urlParams.get('r')) || 0;
+        const backLink = urlParams.get('back'); // Link quay lại AppSheet
+        
         const wheel = document.getElementById('wheel');
         const display = document.getElementById('result-display');
         const spinBtn = document.getElementById('spinBtn');
         const confirmBtn = document.getElementById('confirmBtn');
 
-        // Hàm tạo âm thanh tành tạch (Click sound)
+        // Âm thanh tành tạch
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playClickSound() {
-            const oscillator = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            oscillator.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            oscillator.type = 'sine';
-            oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
-            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-            oscillator.start();
-            oscillator.stop(audioCtx.currentTime + 0.1);
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.type = 'sine'; osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.1);
         }
 
         function doSpin() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
             spinBtn.disabled = true;
             display.innerText = "ĐANG QUAY...";
-            
-            let extraAngle = 0;
-            let giftText = "";
+            let extraAngle = 0; let giftText = "";
 
             if (r <= 5) { extraAngle = 337.5; giftText = "GIẢI NHẤT 🏆"; } 
             else if (r <= 15) { extraAngle = 247.5; giftText = "GIẢI NHÌ 🥈"; } 
             else if (r <= 30) { extraAngle = 157.5; giftText = "GIẢI BA 🥉"; } 
             else { extraAngle = 67.5; giftText = "MAY MẮN LẦN SAU 🍀"; }
 
-            const totalRotation = 3600 + extraAngle;
-            wheel.style.transform = `rotate(${totalRotation}deg)`;
+            wheel.style.transform = `rotate(${3600 + extraAngle}deg)`;
 
-            // Hiệu ứng âm thanh khi quay (tần suất giảm dần theo tốc độ)
-            let currentRotation = 0;
-            const interval = setInterval(() => {
-                const style = window.getComputedStyle(wheel);
-                const matrix = new WebKitCSSMatrix(style.transform);
-                const angle = Math.round(Math.atan2(matrix.b, matrix.a) * (180/Math.PI));
-                if (Math.abs(angle - currentRotation) > 10) {
-                    playClickSound();
-                    currentRotation = angle;
-                }
-            }, 50);
+            // Hiệu ứng âm thanh khi quay
+            let lastA = 0;
+            const iv = setInterval(() => {
+                const m = new WebKitCSSMatrix(window.getComputedStyle(wheel).transform);
+                const a = Math.round(Math.atan2(m.b, m.a) * (180/Math.PI));
+                if (Math.abs(a - lastA) > 15) { playClickSound(); lastA = a; }
+            }, 60);
 
             setTimeout(() => {
-                clearInterval(interval);
+                clearInterval(iv);
                 display.innerText = "KẾT QUẢ: " + giftText;
                 spinBtn.style.display = "none";
                 confirmBtn.style.display = "block";
-                
-                // Bắn pháo hoa nếu trúng giải
                 if (r <= 30) {
-                    const duration = 3 * 1000;
-                    const end = Date.now() + duration;
-                    (function frame() {
-                        confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 } });
-                        confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 } });
-                        if (Date.now() < end) requestAnimationFrame(frame);
-                    }());
+                    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
                 }
             }, 6200);
         }
 
-function finishQuay() {
-    display.innerText = "ĐANG XÁC NHẬN KẾT QUẢ...";
-    
-    // Lấy link quay lại từ tham số 'back' trong URL
-    const urlParams = new URLSearchParams(window.location.search);
-    let appLink = urlParams.get('back'); 
-    
-    // Nếu không tìm thấy link trong URL, dùng link mặc định dẫn về App
-    if (!appLink) {
-        appLink = "https://www.appsheet.com/start/863aa0c1-11b1-4eea-b064-c0adbd99a368";
-    }
-
-    setTimeout(() => {
-        // Cố gắng đóng tab (cho máy tính)
-        window.close(); 
-        // Điều hướng thẳng về trang kết quả AppSheet (cho điện thoại)
-        window.location.replace(appLink); 
-    }, 500);
-}
+        function finishQuay() {
+            display.innerText = "ĐANG QUAY LẠI APP...";
+            const fallback = "https://www.appsheet.com/start/863aa0c1-11b1-4eea-b064-c0adbd99a368";
+            const target = backLink ? decodeURIComponent(backLink) : fallback;
+            
+            setTimeout(() => {
+                window.close();
+                window.location.replace(target);
+            }, 600);
+        }
     </script>
 </body>
 </html>
