@@ -93,16 +93,17 @@ function finishQuay() {
     const recordId = urlParams.get('id');
     const appId = "863aa0c1-11b1-4eea-b064-c0adbd99a368";
     
-    // Link dẫn thẳng đến kết quả Detail
+    // Tạo link "Sâu" dẫn trực tiếp vào dòng dữ liệu và View kết quả
     let targetUrl = `https://www.appsheet.com/start/${appId}#control=Trang%20t%C3%ADnh1_Detail&row=${encodeURIComponent(recordId)}`;
 
-    // Bước 1: Ra lệnh đóng Tab (Dành cho máy tính)
+    // CHIẾN THUẬT:
+    // 1. Thử đóng tab (Nếu là máy tính, tab này sẽ biến mất để hiện tab cũ bên dưới)
     window.close();
 
-    // Bước 2: Sau 200ms, nếu Tab vẫn chưa đóng (hoặc trên điện thoại) 
-    // thì ép trình duyệt chuyển hướng sang trang kết quả
+    // 2. Nếu sau 200ms tab chưa đóng (Dành cho Điện thoại hoặc Máy tính chặn đóng tab)
+    // Thì ép trình duyệt nhảy thẳng vào link kết quả
     setTimeout(() => {
-        window.location.replace(targetUrl);
+        window.location.href = targetUrl;
     }, 200);
 }
     </script>
