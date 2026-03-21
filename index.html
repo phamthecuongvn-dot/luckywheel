@@ -87,21 +87,26 @@
             }, 6200);
         }
 
-        function finishQuay() {
-            display.innerText = "ĐANG ĐỒNG BỘ KẾT QUẢ...";
-            const appId = "863aa0c1-11b1-4eea-b064-c0adbd99a368";
-            
-            // Link ép AppSheet mở đúng bản ghi (Deep Link)
-            // Thay đổi dấu # thành & nếu dùng trên trình duyệt máy tính mà bị lỗi link
-            let targetUrl = `https://www.appsheet.com/start/${appId}#control=Trang%20t%C3%ADnh1_Detail&row=${encodeURIComponent(recordId)}`;
+function finishQuay() {
+    display.innerText = "ĐANG ĐỒNG BỘ KẾT QUẢ...";
+    
+    // Lấy ID từ URL mà AppSheet đã gửi sang
+    const urlParams = new URLSearchParams(window.location.search);
+    const recordId = urlParams.get('id');
+    const appId = "863aa0c1-11b1-4eea-b064-c0adbd99a368";
+    
+    // Link ép AppSheet mở đúng bản ghi vừa quay
+    let targetUrl = `https://www.appsheet.com/start/${appId}#control=Trang%20t%C3%ADnh1_Detail&row=${encodeURIComponent(recordId)}`;
 
-            // CHIẾN THUẬT CHO MÁY TÍNH:
-            // Thay vì chỉ đóng tab, ta ép cái tab vòng quay này trở thành trang kết quả luôn
-            window.location.replace(targetUrl);
-            
-            // Vẫn giữ close() cho các trình duyệt cho phép đóng
-            setTimeout(() => { window.close(); }, 500);
-        }
+    // CHIẾN THUẬT:
+    // 1. Ép Tab hiện tại chuyển hướng sang trang kết quả (Dành cho máy tính)
+    window.location.href = targetUrl;
+
+    // 2. Thử đóng tab sau 300ms (Nếu trình duyệt cho phép)
+    setTimeout(() => {
+        window.close();
+    }, 300);
+}
     </script>
 </body>
 </html>
