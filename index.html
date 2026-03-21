@@ -106,15 +106,35 @@
             }, 6200);
         }
 
-        function finishQuay() {
+function finishQuay() {
             display.innerText = "ĐANG QUAY LẠI APP...";
-            const fallback = "https://www.appsheet.com/start/863aa0c1-11b1-4eea-b064-c0adbd99a368";
-            const target = backLink ? decodeURIComponent(backLink) : fallback;
             
+            // Lấy ID bản ghi từ URL (nếu có)
+            const urlParams = new URLSearchParams(window.location.search);
+            const recordId = urlParams.get('id'); // Chúng ta sẽ gửi ID thay vì gửi cả link
+            
+            // Link gốc của App bạn
+            const appId = "863aa0c1-11b1-4eea-b064-c0adbd99a368";
+            let targetUrl = `https://www.appsheet.com/start/${appId}`;
+
+            // Nếu có ID, ta dẫn thẳng về trang Trang tính1_Detail của dòng đó
+            if (recordId) {
+                targetUrl += `#control=Trang%20t%C3%ADnh1_Detail&row=${encodeURIComponent(recordId)}`;
+            }
+
             setTimeout(() => {
+                // 1. Thử đóng cửa sổ
                 window.close();
-                window.location.replace(target);
-            }, 600);
+                
+                // 2. Nếu không đóng được (trên mobile), thì nhảy link
+                // Dùng location.replace để không tạo thêm lịch sử rác
+                window.location.replace(targetUrl);
+                
+                // 3. Dự phòng cuối cùng sau 1 giây nếu vẫn đứng yên
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 1000);
+            }, 500);
         }
     </script>
 </body>
