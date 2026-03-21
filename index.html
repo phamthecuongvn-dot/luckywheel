@@ -17,23 +17,16 @@
         .btn-spin { background: #e74c3c; color: white; box-shadow: 0 8px 0 #c0392b; display: inline-block; }
         .btn-spin:active { transform: translateY(6px); box-shadow: 0 2px 0 #c0392b; }
         .btn-confirm { background: #27ae60; color: white; box-shadow: 0 8px 0 #1e8449; display: none; margin: 25px auto 0; position: relative; z-index: 200; }
-        .btn-confirm:active { transform: translateY(6px); box-shadow: 0 2px 0 #1e8449; }
         #result-display { margin-top: 25px; font-size: 24px; font-weight: 800; color: #2c3e50; min-height: 40px; text-transform: uppercase; padding: 0 10px; }
     </style>
 </head>
 <body>
     <h1>QUAY THƯỞNG NGÔI SAO MAY MẮN</h1>
     <div class="container">
-        <div class="center-hub">
-            <div class="arrow"></div>
-            <div class="star-circle">⭐</div>
-        </div>
+        <div class="center-hub"><div class="arrow"></div><div class="star-circle">⭐</div></div>
         <svg id="wheel" viewBox="0 0 100 100">
             <defs>
-                <path id="path1" d="M 50 50 L 85 15" />
-                <path id="path2" d="M 50 50 L 85 85" />
-                <path id="path3" d="M 50 50 L 15 85" />
-                <path id="path4" d="M 50 50 L 15 15" />
+                <path id="path1" d="M 50 50 L 85 15" /><path id="path2" d="M 50 50 L 85 85" /><path id="path3" d="M 50 50 L 15 85" /><path id="path4" d="M 50 50 L 15 15" />
             </defs>
             <path d="M 50 50 L 50 0 A 50 50 0 0 1 100 50 Z" fill="#e74c3c"/>
             <path d="M 50 50 L 100 50 A 50 50 0 0 1 50 100 Z" fill="#f1c40f"/>
@@ -47,7 +40,6 @@
             </g>
         </svg>
     </div>
-    
     <button class="btn-spin" id="spinBtn" onclick="doSpin()">BẤM ĐỂ QUAY</button>
     <button class="btn-confirm" id="confirmBtn" onclick="finishQuay()">ẤN XÁC NHẬN KẾT QUẢ</button>
     <div id="result-display"></div>
@@ -55,19 +47,15 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const r = parseInt(urlParams.get('r')) || 0;
-        const backLink = urlParams.get('back'); // Link quay lại AppSheet
-        
         const wheel = document.getElementById('wheel');
         const display = document.getElementById('result-display');
         const spinBtn = document.getElementById('spinBtn');
         const confirmBtn = document.getElementById('confirmBtn');
 
-        // Âm thanh tành tạch
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playClickSound() {
             if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
             osc.connect(gain); gain.connect(audioCtx.destination);
             osc.type = 'sine'; osc.frequency.setValueAtTime(150, audioCtx.currentTime);
             gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
@@ -76,64 +64,36 @@
         }
 
         function doSpin() {
-            spinBtn.disabled = true;
-            display.innerText = "ĐANG QUAY...";
+            spinBtn.disabled = true; display.innerText = "ĐANG QUAY...";
             let extraAngle = 0; let giftText = "";
-
             if (r <= 5) { extraAngle = 337.5; giftText = "GIẢI NHẤT 🏆"; } 
             else if (r <= 15) { extraAngle = 247.5; giftText = "GIẢI NHÌ 🥈"; } 
             else if (r <= 30) { extraAngle = 157.5; giftText = "GIẢI BA 🥉"; } 
             else { extraAngle = 67.5; giftText = "MAY MẮN LẦN SAU 🍀"; }
-
             wheel.style.transform = `rotate(${3600 + extraAngle}deg)`;
-
-            // Hiệu ứng âm thanh khi quay
             let lastA = 0;
             const iv = setInterval(() => {
                 const m = new WebKitCSSMatrix(window.getComputedStyle(wheel).transform);
                 const a = Math.round(Math.atan2(m.b, m.a) * (180/Math.PI));
                 if (Math.abs(a - lastA) > 15) { playClickSound(); lastA = a; }
             }, 60);
-
             setTimeout(() => {
-                clearInterval(iv);
-                display.innerText = "KẾT QUẢ: " + giftText;
-                spinBtn.style.display = "none";
-                confirmBtn.style.display = "block";
-                if (r <= 30) {
-                    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-                }
+                clearInterval(iv); display.innerText = "KẾT QUẢ: " + giftText;
+                spinBtn.style.display = "none"; confirmBtn.style.display = "block";
+                if (r <= 30) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
             }, 6200);
         }
 
-function finishQuay() {
+        function finishQuay() {
             display.innerText = "ĐANG QUAY LẠI APP...";
+            // Link gốc đơn giản nhất của App
+            const targetUrl = "https://www.appsheet.com/start/863aa0c1-11b1-4eea-b064-c0adbd99a368";
             
-            // Lấy ID bản ghi từ URL (nếu có)
-            const urlParams = new URLSearchParams(window.location.search);
-            const recordId = urlParams.get('id'); // Chúng ta sẽ gửi ID thay vì gửi cả link
-            
-            // Link gốc của App bạn
-            const appId = "863aa0c1-11b1-4eea-b064-c0adbd99a368";
-            let targetUrl = `https://www.appsheet.com/start/${appId}`;
-
-            // Nếu có ID, ta dẫn thẳng về trang Trang tính1_Detail của dòng đó
-            if (recordId) {
-                targetUrl += `#control=Trang%20t%C3%ADnh1_Detail&row=${encodeURIComponent(recordId)}`;
-            }
-
             setTimeout(() => {
-                // 1. Thử đóng cửa sổ
+                // Thử đóng tab trước (dành cho máy tính)
                 window.close();
-                
-                // 2. Nếu không đóng được (trên mobile), thì nhảy link
-                // Dùng location.replace để không tạo thêm lịch sử rác
+                // Nếu vẫn còn ở tab cũ, nhảy về link App chính (dành cho cả 2 thiết bị)
                 window.location.replace(targetUrl);
-                
-                // 3. Dự phòng cuối cùng sau 1 giây nếu vẫn đứng yên
-                setTimeout(() => {
-                    window.location.href = targetUrl;
-                }, 1000);
             }, 500);
         }
     </script>
