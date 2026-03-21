@@ -47,6 +47,8 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const r = parseInt(urlParams.get('r')) || 0;
+        const backLink = urlParams.get('back'); // ĐÂY LÀ CHÌA KHÓA
+        
         const wheel = document.getElementById('wheel');
         const display = document.getElementById('result-display');
         const spinBtn = document.getElementById('spinBtn');
@@ -86,15 +88,14 @@
 
         function finishQuay() {
             display.innerText = "ĐANG QUAY LẠI APP...";
-            // Link gốc đơn giản nhất của App
-            const targetUrl = "https://www.appsheet.com/start/863aa0c1-11b1-4eea-b064-c0adbd99a368";
+            const fallback = "https://www.appsheet.com/start/863aa0c1-11b1-4eea-b064-c0adbd99a368";
+            // Nếu có backLink (chứa link Detail), nó sẽ ưu tiên dùng link đó
+            const target = backLink ? decodeURIComponent(backLink) : fallback;
             
+            window.close();
             setTimeout(() => {
-                // Thử đóng tab trước (dành cho máy tính)
-                window.close();
-                // Nếu vẫn còn ở tab cũ, nhảy về link App chính (dành cho cả 2 thiết bị)
-                window.location.replace(targetUrl);
-            }, 500);
+                window.location.replace(target);
+            }, 300);
         }
     </script>
 </body>
