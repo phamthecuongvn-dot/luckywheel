@@ -121,14 +121,17 @@
             }, 6200);
         }
 
-        function finishQuay() {
-            display.innerText = "ĐANG QUAY LẠI APP...";
-            const appLink = "https://www.appsheet.com/start/863aa0c1-11b1-4eea-b064-c0adbd99a368"; 
-            setTimeout(() => {
-                window.close();
-                window.location.replace(appLink);
-            }, 500);
-        }
+function finishQuay() {
+    display.innerText = "ĐANG QUAY LẠI APP...";
+    
+    // Tạo link dẫn thẳng về View Lịch sử (Thay LICHSU_VIEW bằng tên View danh sách của bạn)
+    const appLink = "https://www.appsheet.com/start/863aa0c1-11b1-4eea-b064-c0adbd99a368#view=LICHSU_VIEW"; 
+
+    setTimeout(() => {
+        window.close();
+        window.location.replace(appLink);
+    }, 500);
+}
     </script>
 </body>
 </html>
