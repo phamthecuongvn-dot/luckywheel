@@ -11,8 +11,17 @@
         .center-hub { position: absolute; z-index: 100; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; pointer-events: none; }
         .arrow { width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 50px solid #2c3e50; margin-bottom: -5px; }
         .star-circle { font-size: 50px; background: white; border: 8px solid #2c3e50; border-radius: 50%; width: 90px; height: 90px; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .btn-spin { margin-top: 40px; padding: 20px 70px; font-size: 26px; font-weight: 900; cursor: pointer; background: #e74c3c; color: white; border: none; border-radius: 100px; box-shadow: 0 8px 0 #c0392b; text-transform: uppercase; }
+        
+        .btn-spin, .btn-confirm { margin-top: 40px; padding: 20px 60px; font-size: 24px; font-weight: 900; cursor: pointer; border: none; border-radius: 100px; text-transform: uppercase; transition: all 0.2s; }
+        
+        .btn-spin { background: #e74c3c; color: white; box-shadow: 0 8px 0 #c0392b; }
         .btn-spin:active { transform: translateY(6px); box-shadow: 0 2px 0 #c0392b; }
+        .btn-spin:disabled { background: #bdc3c7; box-shadow: 0 5px 0 #95a5a6; cursor: not-allowed; }
+
+        /* Nút xác nhận kết quả */
+        .btn-confirm { background: #27ae60; color: white; box-shadow: 0 8px 0 #1e8449; display: none; margin: 40px auto 0; }
+        .btn-confirm:active { transform: translateY(6px); box-shadow: 0 2px 0 #1e8449; }
+
         #result-display { margin-top: 30px; font-size: 30px; font-weight: 800; color: #2c3e50; min-height: 45px; text-transform: uppercase; }
     </style>
 </head>
@@ -30,7 +39,11 @@
                 <path id="path3" d="M 50 50 L 15 85" />
                 <path id="path4" d="M 50 50 L 15 15" />
             </defs>
-            <path d="M 50 50 L 50 0 A 50 50 0 0 1 100 50 Z" fill="#e74c3c"/> <path d="M 50 50 L 100 50 A 50 50 0 0 1 50 100 Z" fill="#f1c40f"/> <path d="M 50 50 L 50 100 A 50 50 0 0 1 0 50 Z" fill="#2ecc71"/> <path d="M 50 50 L 0 50 A 50 50 0 0 1 50 0 Z" fill="#3498db"/> <g font-size="4.5" font-weight="900" fill="white" text-anchor="end">
+            <path d="M 50 50 L 50 0 A 50 50 0 0 1 100 50 Z" fill="#e74c3c"/>
+            <path d="M 50 50 L 100 50 A 50 50 0 0 1 50 100 Z" fill="#f1c40f"/>
+            <path d="M 50 50 L 50 100 A 50 50 0 0 1 0 50 Z" fill="#2ecc71"/>
+            <path d="M 50 50 L 0 50 A 50 50 0 0 1 50 0 Z" fill="#3498db"/>
+            <g font-size="4.5" font-weight="900" fill="white" text-anchor="end">
                 <text><textPath xlink:href="#path1" startOffset="92%">GIẢI NHẤT</textPath></text>
                 <text><textPath xlink:href="#path2" startOffset="92%">GIẢI NHÌ</textPath></text>
                 <text><textPath xlink:href="#path3" startOffset="92%">GIẢI BA</textPath></text>
@@ -38,7 +51,10 @@
             </g>
         </svg>
     </div>
+    
     <button class="btn-spin" id="spinBtn" onclick="doSpin()">BẤM ĐỂ QUAY</button>
+    <button class="btn-confirm" id="confirmBtn" onclick="window.history.back()">ẤN XÁC NHẬN KẾT QUẢ</button>
+    
     <div id="result-display"></div>
 
     <script>
@@ -46,33 +62,26 @@
         const r = parseInt(urlParams.get('r')) || 0;
         const wheel = document.getElementById('wheel');
         const display = document.getElementById('result-display');
+        const spinBtn = document.getElementById('spinBtn');
+        const confirmBtn = document.getElementById('confirmBtn');
 
         function doSpin() {
-            document.getElementById('spinBtn').disabled = true;
+            spinBtn.disabled = true;
             display.innerText = "ĐANG QUAY...";
             let extraAngle = 0;
             let giftText = "";
 
-            // LOGIC KHỚP 100% VỚI APPSHEET:
-            // Ô đỏ (Giải nhất): 315-360 độ (extraAngle = 337.5)
-            // Ô vàng (Giải nhì): 225-270 độ (extraAngle = 247.5)
-            // Ô xanh lá (Giải ba): 135-180 độ (extraAngle = 157.5)
-            // Ô xanh dương (Lần sau): 45-90 độ (extraAngle = 67.5)
-
-            if (r <= 5) { 
-                extraAngle = 337.5; giftText = "GIẢI NHẤT 🏆"; 
-            } else if (r <= 15) { 
-                extraAngle = 247.5; giftText = "GIẢI NHÌ 🥈"; 
-            } else if (r <= 30) { 
-                extraAngle = 157.5; giftText = "GIẢI BA 🥉"; 
-            } else { 
-                extraAngle = 67.5; giftText = "Chúc bạn may mắn lần sau 🍀"; 
-            }
+            if (r <= 5) { extraAngle = 337.5; giftText = "GIẢI NHẤT 🏆"; } 
+            else if (r <= 15) { extraAngle = 247.5; giftText = "GIẢI NHÌ 🥈"; } 
+            else if (r <= 30) { extraAngle = 157.5; giftText = "GIẢI BA 🥉"; } 
+            else { extraAngle = 67.5; giftText = "CHÚC BẠN MAY MẮN LẦN SAU 🍀"; }
 
             wheel.style.transform = `rotate(${3600 + extraAngle}deg)`;
 
             setTimeout(() => {
                 display.innerText = "KẾT QUẢ: " + giftText;
+                spinBtn.style.display = "none"; // Ẩn nút quay
+                confirmBtn.style.display = "block"; // Hiện nút xác nhận
             }, 6200);
         }
     </script>
