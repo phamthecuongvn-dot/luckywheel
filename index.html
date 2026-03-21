@@ -87,27 +87,24 @@
         }
 
 function finishQuay() {
-            display.innerText = "ĐANG XÁC NHẬN KẾT QUẢ...";
-            
-            // Lấy ID bản ghi từ URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const recordId = urlParams.get('id');
-            
-            // Link App của bạn
-            const appId = "863aa0c1-11b1-4eea-b064-c0adbd99a368";
-            
-            // ĐÂY LÀ ĐIỂM QUAN TRỌNG: 
-            // Ta ép AppSheet mở thẳng Trang tính1_Detail (Bỏ qua New View)
-            let targetUrl = `https://www.appsheet.com/start/${appId}#control=Trang%20t%C3%ADnh1_Detail&row=${encodeURIComponent(recordId)}`;
+    display.innerText = "ĐANG XÁC NHẬN KẾT QUẢ...";
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const recordId = urlParams.get('id');
+    const appId = "863aa0c1-11b1-4eea-b064-c0adbd99a368";
+    
+    // Link dẫn thẳng đến kết quả Detail
+    let targetUrl = `https://www.appsheet.com/start/${appId}#control=Trang%20t%C3%ADnh1_Detail&row=${encodeURIComponent(recordId)}`;
 
-            // 1. Thử đóng Tab (Dành cho máy tính - để học viên quay lại Tab AppSheet đang mở)
-            window.close();
-            
-            // 2. Chuyển hướng ngay lập tức (Dành cho điện thoại)
-            setTimeout(() => {
-                window.location.replace(targetUrl);
-            }, 200);
-        }
+    // Bước 1: Ra lệnh đóng Tab (Dành cho máy tính)
+    window.close();
+
+    // Bước 2: Sau 200ms, nếu Tab vẫn chưa đóng (hoặc trên điện thoại) 
+    // thì ép trình duyệt chuyển hướng sang trang kết quả
+    setTimeout(() => {
+        window.location.replace(targetUrl);
+    }, 200);
+}
     </script>
 </body>
 </html>
