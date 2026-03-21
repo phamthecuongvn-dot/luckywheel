@@ -94,13 +94,14 @@ function finishQuay() {
     const recordId = urlParams.get('id');
     const appId = "863aa0c1-11b1-4eea-b064-c0adbd99a368";
     
-    // SỬA ĐỔI QUAN TRỌNG: Thêm &at=... và &force=1 để ép trình duyệt máy tính làm mới
-    let targetUrl = `https://www.appsheet.com/start/${appId}?force=1#control=Trang%20t%C3%ADnh1_Detail&row=${encodeURIComponent(recordId)}`;
+    // Thêm &at=... kèm thời gian thực để ép trình duyệt máy tính không dùng cache cũ
+    const timestamp = new Date().getTime();
+    let targetUrl = `https://www.appsheet.com/start/${appId}?at=${timestamp}#control=Trang%20t%C3%ADnh1_Detail&row=${encodeURIComponent(recordId)}`;
 
-    // 1. Mở link kết quả ngay tại tab này (Dành cho máy tính)
-    window.location.replace(targetUrl);
-    
-    // 2. Thử đóng tab (Nếu trình duyệt cho phép)
+    // 1. Chuyển hướng Tab vòng quay thành trang kết quả
+    window.location.href = targetUrl;
+
+    // 2. Cố gắng đóng tab (nếu trình duyệt cho phép) sau khi đã chuyển hướng
     setTimeout(() => { window.close(); }, 500);
 }
     </script>
