@@ -122,14 +122,22 @@
         }
 
 function finishQuay() {
-    display.innerText = "ĐANG QUAY LẠI APP...";
+    display.innerText = "ĐANG XÁC NHẬN KẾT QUẢ...";
     
-    // Tạo link dẫn thẳng về View Lịch sử (Thay LICHSU_VIEW bằng tên View danh sách của bạn)
-    const appLink = "https://www.appsheet.com/start/863aa0c1-11b1-4eea-b064-c0adbd99a368#view=LICHSU_VIEW"; 
+    // Lấy link quay lại từ tham số 'back' trong URL
+    const urlParams = new URLSearchParams(window.location.search);
+    let appLink = urlParams.get('back'); 
+    
+    // Nếu không tìm thấy link trong URL, dùng link mặc định dẫn về App
+    if (!appLink) {
+        appLink = "https://www.appsheet.com/start/863aa0c1-11b1-4eea-b064-c0adbd99a368";
+    }
 
     setTimeout(() => {
-        window.close();
-        window.location.replace(appLink);
+        // Cố gắng đóng tab (cho máy tính)
+        window.close(); 
+        // Điều hướng thẳng về trang kết quả AppSheet (cho điện thoại)
+        window.location.replace(appLink); 
     }, 500);
 }
     </script>
