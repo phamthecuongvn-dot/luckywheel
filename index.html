@@ -25,40 +25,43 @@
         </div>
         <svg id="wheel" viewBox="0 0 100 100">
             <defs>
-                <path id="path1" d="M 50 50 L 85 15" />
-                <path id="path2" d="M 50 50 L 85 85" />
-                <path id="path3" d="M 50 50 L 15 85" />
-                <path id="path4" d="M 50 50 L 15 15" />
-            </defs>
-            <path d="M 50 50 L 50 0 A 50 50 0 0 1 100 50 Z" fill="#e74c3c"/>
-            <path d="M 50 50 L 100 50 A 50 50 0 0 1 50 100 Z" fill="#f1c40f"/>
-            <path d="M 50 50 L 50 100 A 50 50 0 0 1 0 50 Z" fill="#2ecc71"/>
-            <path d="M 50 50 L 0 50 A 50 50 0 0 1 50 0 Z" fill="#3498db"/>
-            <g font-size="4.8" font-weight="900" fill="white" text-anchor="end">
-                <text><textPath xlink:href="#path1" startOffset="92%">GIẢI NHẤT</textPath></text>
-                <text><textPath xlink:href="#path2" startOffset="92%">GIẢI NHÌ</textPath></text>
-                <text><textPath xlink:href="#path3" startOffset="92%">GIẢI BA</textPath></text>
-                <text><textPath xlink:href="#path4" startOffset="92%">LẦN SAU</textPath></text>
+                <path id="path1" d="M 50 50 L 59 1" />   <path id="path2" d="M 50 50 L 85 15" />  <path id="path3" d="M 50 50 L 98 65" />  <path id="path4" d="M 50 50 L 15 50" />  </defs>
+            <path d="M 50 50 L 50 0 A 50 50 0 0 1 65.5 2.5 Z" fill="#e74c3c"/> <path d="M 50 50 L 65.5 2.5 A 50 50 0 0 1 90.5 19.1 Z" fill="#f1c40f"/> <path d="M 50 50 L 90.5 19.1 A 50 50 0 0 1 97.6 65.5 Z" fill="#2ecc71"/> <path d="M 50 50 L 97.6 65.5 A 50 50 0 1 1 50 0 Z" fill="#3498db"/> <g font-size="3.5" font-weight="900" fill="white" text-anchor="end">
+                <text><textPath xlink:href="#path1" startOffset="95%">GIẢI NHẤT</textPath></text>
+                <text><textPath xlink:href="#path2" startOffset="95%">GIẢI NHÌ</textPath></text>
+                <text><textPath xlink:href="#path3" startOffset="95%">GIẢI BA</textPath></text>
+                <text><textPath xlink:href="#path4" startOffset="90%">LẦN SAU</textPath></text>
             </g>
         </svg>
     </div>
     <button class="btn-spin" id="spinBtn" onclick="doSpin()">BẤM ĐỂ QUAY</button>
     <div id="result-display"></div>
+
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const r = parseInt(urlParams.get('r')) || 0;
         const wheel = document.getElementById('wheel');
         const display = document.getElementById('result-display');
+
         function doSpin() {
             document.getElementById('spinBtn').disabled = true;
             display.innerText = "ĐANG QUAY...";
             let extraAngle = 0;
             let giftText = "";
-            if (r > 75) { extraAngle = 335; giftText = "GIẢI NHẤT 🏆"; } 
-            else if (r > 50) { extraAngle = 245; giftText = "GIẢI NHÌ 🥈"; } 
-            else if (r > 25) { extraAngle = 155; giftText = "GIẢI BA 🥉"; } 
-            else { extraAngle = 65; giftText = "MAY MẮN LẦN SAU 🍀"; }
+
+            // Khớp chính xác logic của AppSheet
+            if (r <= 5) { 
+                extraAngle = 351; giftText = "GIẢI NHẤT 🏆"; 
+            } else if (r <= 15) { 
+                extraAngle = 333; giftText = "GIẢI NHÌ 🥈"; 
+            } else if (r <= 30) { 
+                extraAngle = 306; giftText = "GIẢI BA 🥉"; 
+            } else { 
+                extraAngle = 144; giftText = "MAY MẮN LẦN SAU 🍀"; 
+            }
+
             wheel.style.transform = `rotate(${3600 + extraAngle}deg)`;
+
             setTimeout(() => {
                 display.innerText = "KẾT QUẢ: " + giftText;
             }, 6200);
