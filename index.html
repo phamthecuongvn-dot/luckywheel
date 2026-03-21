@@ -8,10 +8,8 @@
         h1 { color: #2c3e50; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; margin-bottom: 30px; }
         .container { position: relative; width: 500px; height: 500px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
         
-        /* Vòng quay */
         #wheel { width: 440px; height: 440px; transition: transform 6s cubic-bezier(0.1, 0, 0, 1); filter: drop-shadow(0 15px 35px rgba(0,0,0,0.15)); }
         
-        /* Tâm cố định: Kim và Ngôi sao */
         .center-hub { position: absolute; z-index: 100; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; pointer-events: none; }
         .arrow { width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 50px solid #2c3e50; margin-bottom: -5px; }
         .star-circle { font-size: 50px; background: white; border: 8px solid #2c3e50; border-radius: 50%; width: 90px; height: 90px; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
@@ -30,16 +28,23 @@
         </div>
         
         <svg id="wheel" viewBox="0 0 100 100">
+            <defs>
+                <path id="path1" d="M 50 50 L 85 15" />
+                <path id="path2" d="M 50 50 L 85 85" />
+                <path id="path3" d="M 50 50 L 15 85" />
+                <path id="path4" d="M 50 50 L 15 15" />
+            </defs>
+
             <path d="M 50 50 L 50 0 A 50 50 0 0 1 100 50 Z" fill="#e74c3c"/>
             <path d="M 50 50 L 100 50 A 50 50 0 0 1 50 100 Z" fill="#f1c40f"/>
             <path d="M 50 50 L 50 100 A 50 50 0 0 1 0 50 Z" fill="#2ecc71"/>
             <path d="M 50 50 L 0 50 A 50 50 0 0 1 50 0 Z" fill="#3498db"/>
             
-            <g font-size="4.5" font-weight="900" fill="white" text-anchor="middle">
-                <text transform="rotate(25, 50, 50) translate(0, -32) rotate(0)">GIẢI NHẤT</text>
-                <text transform="rotate(115, 50, 50) translate(0, -32) rotate(0)">GIẢI NHÌ</text>
-                <text transform="rotate(205, 50, 50) translate(0, -32) rotate(0)">GIẢI BA</text>
-                <text transform="rotate(295, 50, 50) translate(0, -32) rotate(0)">MAY MẮN LẦN SAU</text>
+            <g font-size="4.5" font-weight="900" fill="white" text-anchor="end">
+                <text><textPath xlink:href="#path1" startOffset="90%">GIẢI NHẤT</textPath></text>
+                <text><textPath xlink:href="#path2" startOffset="90%">GIẢI NHÌ</textPath></text>
+                <text><textPath xlink:href="#path3" startOffset="90%">GIẢI BA</textPath></text>
+                <text><textPath xlink:href="#path4" startOffset="90%">MAY MẮN LẦN SAU</textPath></text>
             </g>
         </svg>
     </div>
