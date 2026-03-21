@@ -1,28 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QUAY THƯỞNG NGÔI SAO MAY MẮN</title>
     <style>
-        body { text-align: center; font-family: 'Segoe UI', Arial, sans-serif; background: #f8f9fa; margin: 0; padding-top: 20px; }
-        h1 { color: #2c3e50; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; margin-bottom: 30px; }
-        .container { position: relative; width: 500px; height: 500px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
-        #wheel { width: 440px; height: 440px; transition: transform 6s cubic-bezier(0.1, 0, 0, 1); filter: drop-shadow(0 15px 35px rgba(0,0,0,0.15)); }
+        body { text-align: center; font-family: 'Segoe UI', Arial, sans-serif; background: #f8f9fa; margin: 0; padding-top: 20px; overflow-x: hidden; }
+        h1 { color: #2c3e50; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; margin-bottom: 20px; font-size: 24px; padding: 0 10px; }
+        
+        .container { position: relative; width: 90vw; max-width: 500px; aspect-ratio: 1/1; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+        
+        /* Vòng quay */
+        #wheel { width: 90%; height: 90%; transition: transform 6s cubic-bezier(0.1, 0, 0, 1); filter: drop-shadow(0 15px 35px rgba(0,0,0,0.15)); }
+        
+        /* Tâm cố định: Kim và Ngôi sao */
         .center-hub { position: absolute; z-index: 100; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; pointer-events: none; }
-        .arrow { width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 50px solid #2c3e50; margin-bottom: -5px; }
-        .star-circle { font-size: 50px; background: white; border: 8px solid #2c3e50; border-radius: 50%; width: 90px; height: 90px; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .arrow { width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-bottom: 45px solid #2c3e50; margin-bottom: -5px; filter: drop-shadow(0 -2px 2px rgba(0,0,0,0.2)); }
+        .star-circle { font-size: 45px; background: white; border: 6px solid #2c3e50; border-radius: 50%; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+        /* Nút bấm */
+        .btn-spin, .btn-confirm { margin-top: 30px; padding: 18px 50px; font-size: 22px; font-weight: 900; cursor: pointer; border: none; border-radius: 100px; text-transform: uppercase; transition: all 0.2s; width: 80%; max-width: 350px; }
         
-        .btn-spin, .btn-confirm { margin-top: 40px; padding: 20px 60px; font-size: 24px; font-weight: 900; cursor: pointer; border: none; border-radius: 100px; text-transform: uppercase; transition: all 0.2s; }
-        
-        .btn-spin { background: #e74c3c; color: white; box-shadow: 0 8px 0 #c0392b; }
+        .btn-spin { background: #e74c3c; color: white; box-shadow: 0 8px 0 #c0392b; display: inline-block; }
         .btn-spin:active { transform: translateY(6px); box-shadow: 0 2px 0 #c0392b; }
         .btn-spin:disabled { background: #bdc3c7; box-shadow: 0 5px 0 #95a5a6; cursor: not-allowed; }
 
-        /* Nút xác nhận kết quả */
-        .btn-confirm { background: #27ae60; color: white; box-shadow: 0 8px 0 #1e8449; display: none; margin: 40px auto 0; }
+        .btn-confirm { background: #27ae60; color: white; box-shadow: 0 8px 0 #1e8449; display: none; margin-left: auto; margin-right: auto; }
         .btn-confirm:active { transform: translateY(6px); box-shadow: 0 2px 0 #1e8449; }
 
-        #result-display { margin-top: 30px; font-size: 30px; font-weight: 800; color: #2c3e50; min-height: 45px; text-transform: uppercase; }
+        #result-display { margin-top: 25px; font-size: 26px; font-weight: 800; color: #2c3e50; min-height: 40px; text-transform: uppercase; padding: 0 10px; }
     </style>
 </head>
 <body>
@@ -39,11 +45,7 @@
                 <path id="path3" d="M 50 50 L 15 85" />
                 <path id="path4" d="M 50 50 L 15 15" />
             </defs>
-            <path d="M 50 50 L 50 0 A 50 50 0 0 1 100 50 Z" fill="#e74c3c"/>
-            <path d="M 50 50 L 100 50 A 50 50 0 0 1 50 100 Z" fill="#f1c40f"/>
-            <path d="M 50 50 L 50 100 A 50 50 0 0 1 0 50 Z" fill="#2ecc71"/>
-            <path d="M 50 50 L 0 50 A 50 50 0 0 1 50 0 Z" fill="#3498db"/>
-            <g font-size="4.5" font-weight="900" fill="white" text-anchor="end">
+            <path d="M 50 50 L 50 0 A 50 50 0 0 1 100 50 Z" fill="#e74c3c"/> <path d="M 50 50 L 100 50 A 50 50 0 0 1 50 100 Z" fill="#f1c40f"/> <path d="M 50 50 L 50 100 A 50 50 0 0 1 0 50 Z" fill="#2ecc71"/> <path d="M 50 50 L 0 50 A 50 50 0 0 1 50 0 Z" fill="#3498db"/> <g font-size="4.5" font-weight="900" fill="white" text-anchor="end">
                 <text><textPath xlink:href="#path1" startOffset="92%">GIẢI NHẤT</textPath></text>
                 <text><textPath xlink:href="#path2" startOffset="92%">GIẢI NHÌ</textPath></text>
                 <text><textPath xlink:href="#path3" startOffset="92%">GIẢI BA</textPath></text>
@@ -53,7 +55,7 @@
     </div>
     
     <button class="btn-spin" id="spinBtn" onclick="doSpin()">BẤM ĐỂ QUAY</button>
-    <button class="btn-confirm" id="confirmBtn" onclick="window.history.back()">ẤN XÁC NHẬN KẾT QUẢ</button>
+    <button class="btn-confirm" id="confirmBtn" onclick="finishQuay()">ẤN XÁC NHẬN KẾT QUẢ</button>
     
     <div id="result-display"></div>
 
@@ -71,18 +73,35 @@
             let extraAngle = 0;
             let giftText = "";
 
-            if (r <= 5) { extraAngle = 337.5; giftText = "GIẢI NHẤT 🏆"; } 
-            else if (r <= 15) { extraAngle = 247.5; giftText = "GIẢI NHÌ 🥈"; } 
-            else if (r <= 30) { extraAngle = 157.5; giftText = "GIẢI BA 🥉"; } 
-            else { extraAngle = 67.5; giftText = "CHÚC BẠN MAY MẮN LẦN SAU 🍀"; }
+            // LOGIC KHỚP 100% VỚI APPSHEET CỦA BẠN
+            if (r <= 5) { 
+                extraAngle = 337.5; giftText = "GIẢI NHẤT 🏆"; 
+            } else if (r <= 15) { 
+                extraAngle = 247.5; giftText = "GIẢI NHÌ 🥈"; 
+            } else if (r <= 30) { 
+                extraAngle = 157.5; giftText = "GIẢI BA 🥉"; 
+            } else { 
+                extraAngle = 67.5; giftText = "CHÚC BẠN MAY MẮN LẦN SAU 🍀"; 
+            }
 
+            // Xoay 10 vòng + góc phụ
             wheel.style.transform = `rotate(${3600 + extraAngle}deg)`;
 
             setTimeout(() => {
                 display.innerText = "KẾT QUẢ: " + giftText;
-                spinBtn.style.display = "none"; // Ẩn nút quay
-                confirmBtn.style.display = "block"; // Hiện nút xác nhận
+                spinBtn.style.display = "none";
+                confirmBtn.style.display = "block";
             }, 6200);
+        }
+
+        function finishQuay() {
+            display.innerText = "ĐANG QUAY LẠI ỨNG DỤNG...";
+            setTimeout(() => {
+                // Thử đóng tab
+                window.close();
+                // Phòng hờ nếu trình duyệt chặn close(), chuyển hướng về trang trắng
+                window.location.href = "about:blank";
+            }, 800);
         }
     </script>
 </body>
