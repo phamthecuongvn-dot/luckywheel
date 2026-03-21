@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <title>QUAY THƯỞNG NGÔI SAO MAY MẮN</title>
     <style>
-        body { text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f9fa; padding-top: 20px; margin: 0; }
-        h1 { color: #2c3e50; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; font-weight: 800; }
+        body { text-align: center; font-family: 'Segoe UI', Arial, sans-serif; background: #f8f9fa; margin: 0; padding-top: 20px; }
+        h1 { color: #2c3e50; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; margin-bottom: 30px; }
         .container { position: relative; width: 500px; height: 500px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
         
         /* Vòng quay */
-        #wheel { width: 440px; height: 440px; transition: transform 6s cubic-bezier(0.1, 0, 0, 1); filter: drop-shadow(0 15px 35px rgba(0,0,0,0.2)); }
+        #wheel { width: 440px; height: 440px; transition: transform 6s cubic-bezier(0.1, 0, 0, 1); filter: drop-shadow(0 15px 35px rgba(0,0,0,0.15)); }
         
-        /* Tâm cố định */
-        .center-hub { position: absolute; z-index: 30; display: flex; flex-direction: column; align-items: center; pointer-events: none; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-        .arrow { width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-bottom: 45px solid #2c3e50; margin-bottom: -2px; }
-        .star-circle { font-size: 50px; background: white; border: 6px solid #2c3e50; border-radius: 50%; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        /* Tâm cố định: Kim và Ngôi sao */
+        .center-hub { position: absolute; z-index: 100; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; pointer-events: none; }
+        .arrow { width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 50px solid #2c3e50; margin-bottom: -5px; }
+        .star-circle { font-size: 50px; background: white; border: 8px solid #2c3e50; border-radius: 50%; width: 90px; height: 90px; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
-        .btn-spin { margin-top: 30px; padding: 18px 60px; font-size: 24px; font-weight: 900; cursor: pointer; background: #e74c3c; color: white; border: none; border-radius: 100px; box-shadow: 0 8px 0 #c0392b; text-transform: uppercase; }
+        .btn-spin { margin-top: 40px; padding: 20px 70px; font-size: 26px; font-weight: 900; cursor: pointer; background: #e74c3c; color: white; border: none; border-radius: 100px; box-shadow: 0 8px 0 #c0392b; text-transform: uppercase; }
         .btn-spin:active { transform: translateY(6px); box-shadow: 0 2px 0 #c0392b; }
-        #result-display { margin-top: 25px; font-size: 28px; font-weight: 800; color: #2c3e50; min-height: 40px; }
+        #result-display { margin-top: 30px; font-size: 30px; font-weight: 800; color: #2c3e50; min-height: 45px; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -35,11 +35,11 @@
             <path d="M 50 50 L 50 100 A 50 50 0 0 1 0 50 Z" fill="#2ecc71"/>
             <path d="M 50 50 L 0 50 A 50 50 0 0 1 50 0 Z" fill="#3498db"/>
             
-            <g font-size="4.2" font-weight="900" fill="white" text-anchor="middle">
-                <text transform="rotate(45, 50, 50) translate(0, -32)">GIẢI NHẤT</text>
-                <text transform="rotate(135, 50, 50) translate(0, -32)">GIẢI NHÌ</text>
-                <text transform="rotate(225, 50, 50) translate(0, -32)">GIẢI BA</text>
-                <text transform="rotate(315, 50, 50) translate(0, -32)">LẦN SAU</text>
+            <g font-size="4.5" font-weight="900" fill="white" text-anchor="middle">
+                <text transform="rotate(25, 50, 50) translate(0, -32) rotate(0)">GIẢI NHẤT</text>
+                <text transform="rotate(115, 50, 50) translate(0, -32) rotate(0)">GIẢI NHÌ</text>
+                <text transform="rotate(205, 50, 50) translate(0, -32) rotate(0)">GIẢI BA</text>
+                <text transform="rotate(295, 50, 50) translate(0, -32) rotate(0)">MAY MẮN LẦN SAU</text>
             </g>
         </svg>
     </div>
@@ -60,11 +60,11 @@
             let extraAngle = 0;
             let giftText = "";
 
-            // Khớp với logic 4 vùng màu
-            if (r > 75) { extraAngle = 315; giftText = "GIẢI NHẤT 🏆"; } 
-            else if (r > 50) { extraAngle = 225; giftText = "GIẢI NHÌ 🥈"; } 
-            else if (r > 25) { extraAngle = 135; giftText = "GIẢI BA 🥉"; } 
-            else { extraAngle = 45; giftText = "MAY MẮN LẦN SAU 🍀"; }
+            // Logic dừng kim đen (đỉnh 12h) vào giữa miếng bánh
+            if (r > 75) { extraAngle = 335; giftText = "GIẢI NHẤT 🏆"; } 
+            else if (r > 50) { extraAngle = 245; giftText = "GIẢI NHÌ 🥈"; } 
+            else if (r > 25) { extraAngle = 155; giftText = "GIẢI BA 🥉"; } 
+            else { extraAngle = 65; giftText = "MAY MẮN LẦN SAU 🍀"; }
 
             wheel.style.transform = `rotate(${3600 + extraAngle}deg)`;
 
