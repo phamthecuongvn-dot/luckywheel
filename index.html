@@ -86,16 +86,27 @@
             }, 6200);
         }
 
-        function finishQuay() {
-            display.innerText = "ĐANG QUAY LẠI APP...";
-            const fallback = "https://www.appsheet.com/start/863aa0c1-11b1-4eea-b064-c0adbd99a368";
-            // Nếu có backLink (chứa link Detail), nó sẽ ưu tiên dùng link đó
-            const target = backLink ? decodeURIComponent(backLink) : fallback;
+function finishQuay() {
+            display.innerText = "ĐANG XÁC NHẬN KẾT QUẢ...";
             
+            // Lấy ID bản ghi từ URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const recordId = urlParams.get('id');
+            
+            // Link App của bạn
+            const appId = "863aa0c1-11b1-4eea-b064-c0adbd99a368";
+            
+            // ĐÂY LÀ ĐIỂM QUAN TRỌNG: 
+            // Ta ép AppSheet mở thẳng Trang tính1_Detail (Bỏ qua New View)
+            let targetUrl = `https://www.appsheet.com/start/${appId}#control=Trang%20t%C3%ADnh1_Detail&row=${encodeURIComponent(recordId)}`;
+
+            // 1. Thử đóng Tab (Dành cho máy tính - để học viên quay lại Tab AppSheet đang mở)
             window.close();
+            
+            // 2. Chuyển hướng ngay lập tức (Dành cho điện thoại)
             setTimeout(() => {
-                window.location.replace(target);
-            }, 300);
+                window.location.replace(targetUrl);
+            }, 200);
         }
     </script>
 </body>
