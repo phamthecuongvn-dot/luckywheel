@@ -2,42 +2,27 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>QUAY THƯỞNG NGÔI SAO MAY MẮN - MS HƯƠNG</title>
+    <title>QUAY THƯỞNG NGÔI SAO MAY MẮN</title>
     <style>
         body { text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f9fa; padding-top: 20px; margin: 0; }
         h1 { color: #2c3e50; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; font-weight: 800; }
-        
         .container { position: relative; width: 500px; height: 500px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
         
-        /* Vòng quay lớn xoay bên dưới */
+        /* Vòng quay */
         #wheel { width: 440px; height: 440px; transition: transform 6s cubic-bezier(0.1, 0, 0, 1); filter: drop-shadow(0 15px 35px rgba(0,0,0,0.2)); }
         
-        /* Bộ tâm CỐ ĐỊNH: Kim chỉ và Ngôi sao */
+        /* Tâm cố định */
         .center-hub { position: absolute; z-index: 30; display: flex; flex-direction: column; align-items: center; pointer-events: none; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-        
-        /* Mũi tên đen: Chạm khít vào viền ngoài ngôi sao, không lòi đuôi */
-        .arrow { 
-            width: 0; height: 0; 
-            border-left: 18px solid transparent; 
-            border-right: 18px solid transparent; 
-            border-bottom: 45px solid #2c3e50; 
-            margin-bottom: -2px; /* Khoảng cách cực nhỏ để chạm khít viền */
-            filter: drop-shadow(0 -2px 2px rgba(0,0,0,0.2)); 
-        }
-        
-        .star-circle { font-size: 60px; color: #f1c40f; background: white; border: 8px solid #2c3e50; border-radius: 50%; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .arrow { width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-bottom: 45px solid #2c3e50; margin-bottom: -2px; }
+        .star-circle { font-size: 50px; background: white; border: 6px solid #2c3e50; border-radius: 50%; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 
-        /* Nút bấm quay */
-        .btn-spin { margin-top: 30px; padding: 20px 70px; font-size: 26px; font-weight: 900; cursor: pointer; background: #e74c3c; color: white; border: none; border-radius: 100px; transition: all 0.2s; box-shadow: 0 8px 0 #c0392b; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-spin { margin-top: 30px; padding: 18px 60px; font-size: 24px; font-weight: 900; cursor: pointer; background: #e74c3c; color: white; border: none; border-radius: 100px; box-shadow: 0 8px 0 #c0392b; text-transform: uppercase; }
         .btn-spin:active { transform: translateY(6px); box-shadow: 0 2px 0 #c0392b; }
-        .btn-spin:disabled { background: #bdc3c7; box-shadow: 0 5px 0 #95a5a6; cursor: not-allowed; transform: none; }
-
-        #result-display { margin-top: 30px; font-size: 30px; font-weight: 800; color: #2c3e50; height: 45px; text-transform: uppercase; }
+        #result-display { margin-top: 25px; font-size: 28px; font-weight: 800; color: #2c3e50; min-height: 40px; }
     </style>
 </head>
 <body>
     <h1>QUAY THƯỞNG NGÔI SAO MAY MẮN</h1>
-    
     <div class="container">
         <div class="center-hub">
             <div class="arrow"></div>
@@ -45,7 +30,12 @@
         </div>
         
         <svg id="wheel" viewBox="0 0 100 100">
-            <path d="M 50 50 L 50 0 A 50 50 0 0 1 100 50 Z" fill="#e74c3c"/> <path d="M 50 50 L 100 50 A 50 50 0 0 1 50 100 Z" fill="#f1c40f"/> <path d="M 50 50 L 50 100 A 50 50 0 0 1 0 50 Z" fill="#2ecc71"/> <path d="M 50 50 L 0 50 A 50 50 0 0 1 50 0 Z" fill="#3498db"/> <g font-size="4.5" font-weight="900" fill="white" text-anchor="middle">
+            <path d="M 50 50 L 50 0 A 50 50 0 0 1 100 50 Z" fill="#e74c3c"/>
+            <path d="M 50 50 L 100 50 A 50 50 0 0 1 50 100 Z" fill="#f1c40f"/>
+            <path d="M 50 50 L 50 100 A 50 50 0 0 1 0 50 Z" fill="#2ecc71"/>
+            <path d="M 50 50 L 0 50 A 50 50 0 0 1 50 0 Z" fill="#3498db"/>
+            
+            <g font-size="4.2" font-weight="900" fill="white" text-anchor="middle">
                 <text transform="rotate(45, 50, 50) translate(0, -32)">GIẢI NHẤT</text>
                 <text transform="rotate(135, 50, 50) translate(0, -32)">GIẢI NHÌ</text>
                 <text transform="rotate(225, 50, 50) translate(0, -32)">GIẢI BA</text>
@@ -59,37 +49,27 @@
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        // Nhận tham số 'r' từ AppSheet (0-100)
-        const resultR = parseInt(urlParams.get('r')) || 0;
+        const r = parseInt(urlParams.get('r')) || 0;
         const wheel = document.getElementById('wheel');
         const display = document.getElementById('result-display');
-        const btn = document.getElementById('spinBtn');
 
         function doSpin() {
-            btn.disabled = true;
-            display.innerText = "VÒNG QUAY ĐANG CHẠY...";
-
-            let baseSpin = 3600; // Quay 10 vòng để tạo hiệu ứng
+            document.getElementById('spinBtn').disabled = true;
+            display.innerText = "ĐANG QUAY...";
+            
             let extraAngle = 0;
             let giftText = "";
 
-            // Logic điều khiển góc dừng dựa trên tham số 'r' (0-100)
-            // Chia 4 vùng: 
-            // 0-25: May mắn lần sau (Xanh dương)
-            // 26-50: Giải Ba (Xanh lá)
-            // 51-75: Giải Nhì (Vàng)
-            // 76-100: Giải Nhất (Đỏ)
-            if (resultR > 75) { extraAngle = 315; giftText = "GIẢI NHẤT 🏆"; } 
-            else if (resultR > 50) { extraAngle = 225; giftText = "GIẢI NHÌ 🥈"; } 
-            else if (resultR > 25) { extraAngle = 135; giftText = "GIẢI BA 🥉"; } 
+            // Khớp với logic 4 vùng màu
+            if (r > 75) { extraAngle = 315; giftText = "GIẢI NHẤT 🏆"; } 
+            else if (r > 50) { extraAngle = 225; giftText = "GIẢI NHÌ 🥈"; } 
+            else if (r > 25) { extraAngle = 135; giftText = "GIẢI BA 🥉"; } 
             else { extraAngle = 45; giftText = "MAY MẮN LẦN SAU 🍀"; }
 
-            // Thực hiện xoay vòng quay
-            wheel.style.transform = `rotate(${baseSpin + extraAngle}deg)`;
+            wheel.style.transform = `rotate(${3600 + extraAngle}deg)`;
 
-            // Hiển thị kết quả sau khi quay xong (khoảng 6.2 giây)
             setTimeout(() => {
-                display.innerText = "CHÚC MỪNG: " + giftText;
+                display.innerText = "KẾT QUẢ: " + giftText;
             }, 6200);
         }
     </script>
